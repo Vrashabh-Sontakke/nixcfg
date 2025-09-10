@@ -37,6 +37,8 @@
         forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
       overlays = import ./overlays { inherit inputs; };
       nixosConfigurations = {
+        
+        # Lenovo ThinkPad X1 Yoga Gen 3
         thinkpad = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs outputs; };
           modules = [ 
@@ -47,6 +49,7 @@
       	    nixos-hardware.nixosModules.lenovo-thinkpad-x1-yoga
           ];
         };
+
       };
       homeConfigurations = {
         "vrash@thinkpad" = home-manager.lib.homeManagerConfiguration {
