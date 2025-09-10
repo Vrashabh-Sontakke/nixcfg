@@ -20,13 +20,22 @@
               };
             };
             LUKS = {
-              name    = "NixOS";
-              label   = "NixOS";
-              size    = "250G";
+              name    = "crypt-nixos";
+              label   = "crypt-part";
+              size    = "100%";
               content = {
                 type     = "luks";
-                name     = "Encrypted";
-                settings = { allowDiscards = true; };
+                name     = "cryptroot";
+                extraOpenArgs = [
+                  # "--allow-discards" # duplicate
+                  # process reads and writes synchronously, no extra workqueue.
+                  # Result: lower latency, higher throughput (but at the cost of slightly less CPU load distribution).
+                  "--perf-no_read_workqueue"
+                  "--perf-no_write_workqueue"
+                ];
+                settings = {
+                  allowDiscards = true;
+                };
                 content  = {
                   type       = "btrfs";
                   extraArgs  = [ "-L" "nixos" "-f" ];
@@ -59,17 +68,17 @@
                 };
               };
             };
-            Windows = {
-              name    = "Windows";
-              label   = "Windows";
-              size    = "100%";
-              type    = "0700"; # NTFS partition type code
-              content = {
-                type         = "filesystem";
-                format       = "ntfs";
-                mountOptions = [ "defaults" ];
-              };
-            };
+            # Windows = {
+            #   name    = "Windows";
+            #   label   = "Windows";
+            #   size    = "100%";
+            #   type    = "0700"; # NTFS partition type code
+            #   content = {
+            #     type         = "filesystem";
+            #     format       = "ntfs";
+            #     mountOptions = [ "defaults" ];
+            #   };
+            # };
           };
         };
       };
