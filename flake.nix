@@ -14,7 +14,7 @@
     nix-ld.inputs.nixpkgs.follows = "nixpkgs"; # this line assume that you also have nixpkgs as an input
 
     # disko (disk partition configuration)
-    isko.url = "github:nix-community/disko";
+    disko.url = "github:nix-community/disko";
     disko.inputs.nixpkgs.follows = "nixpkgs";
 
     # nixos-hardware support

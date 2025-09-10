@@ -57,7 +57,8 @@
   # Enable the GNOME Desktop Environment.
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = true;
-  
+
+  services.logind.lidSwitch = "ignore";
 
   # Configure keymap in X11
   # services.xserver.xkb.layout = "us";
@@ -77,20 +78,46 @@
   # Enable touchpad support (enabled default in most desktopManager).
   # services.libinput.enable = true;
 
+  # Docker
+  virtualisation.docker = {
+    enable = true;
+    storageDriver = "btrfs";
+    # rootless = {
+    #   enable = true;
+    #   setSocketVariable = true;
+    # };
+  };
+  
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.vrash = {
     isNormalUser = true;
     description = "Vrashabh Sontakke";
-    extraGroups = [ "networkmanager" "wheel" ]; # Enable ‘sudo’ for the user.
+    # Enable ‘sudo’ for the user.
+    extraGroups = [ 
+      "networkmanager" 
+      "wheel" 
+      "docker" 
+      # "adbusers" 
+    ];
     packages = with pkgs; [
       google-chrome
-      brave
       vscode
+      slack
+      brave
     ];
   };
-	
-  # Install firefox
-  programs.firefox.enable = true;
+
+  # # Install firefox
+  # programs.firefox.enable = true;
+
+  # nix-ld
+  programs.nix-ld.enable = true;
+
+  #direnv
+  programs.direnv.enable = true;
+  
+  # #adb
+  # programs.adb.enable = true;
 
   # List packages installed in system profile.
   # You can use https://search.nixos.org/ to find more packages (and options).
@@ -100,6 +127,7 @@
     curl
     git
     nil
+    nixd
     direnv
   ];
 
