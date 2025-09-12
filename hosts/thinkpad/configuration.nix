@@ -15,6 +15,11 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
+  # # Grub Bootloader.
+  # boot.loader.grub.enable = true;
+  # boot.loader.grub.device = "/dev/vda";
+  # boot.loader.grub.useOSProber = true;
+
   networking.hostName = "thinkpad"; # Define your hostname.
   # Pick only one of the below networking options.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
@@ -87,6 +92,9 @@
     #   setSocketVariable = true;
     # };
   };
+
+  # Allow unfree packages
+  nixpkgs.config.allowUnfree = true;
   
   # # Define a user account. Don't forget to set a password with ‘passwd’.
   # users.users.vrash = {
@@ -133,7 +141,6 @@
     git
     nil
     nixd
-    direnv
     neovim
   ];
 
