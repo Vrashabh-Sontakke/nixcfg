@@ -23,7 +23,7 @@
       # "qemu-libvirtd"
     ];
     openssh.authorizedKeys.keys = [
-      # "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC3YEmpYbM+cpmyD10tzNRHEn526Z3LJOzYpWEKdJg8DaYyPbDn9iyVX30Nja2SrW4Wadws0Y8DW+Urs25/wVB6mKl7jgPJVkMi5hfobu3XAz8gwSdjDzRSWJrhjynuaXiTtRYED2INbvjLuxx3X8coNwMw58OuUuw5kNJp5aS2qFmHEYQErQsGT4MNqESe3jvTP27Z5pSneBj45LmGK+RcaSnJe7hG+KRtjuhjI7RdzMeDCX73SfUsal+rHeuEw/mmjYmiIItXhFTDn8ZvVwpBKv7xsJG90DkaX2vaTk0wgJdMnpVIuIRBa4EkmMWOQ3bMLGkLQeK/4FUkNcvQ/4+zcZsg4cY9Q7Fj55DD41hAUdF6SYODtn5qMPsTCnJz44glHt/oseKXMSd556NIw2HOvihbJW7Rwl4OEjGaO/dF4nUw4c9tHWmMn9dLslAVpUuZOb7ykgP0jk79ldT3Dv+2Hj0CdAWT2cJAdFX58KQ9jUPT3tBnObSF1lGMI7t77VU= m3tam3re@m3-nix"
+      "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQClfAqcEwFTgnXgQP4YKfewyc4p74CETkI9KXy6Wliwuu4dPfm+456549yOfA3cejy/M20jiFCnUKMONerAXlRTK38NG54RauvjWfk9EZbSuA9hJ3b8TJdTGfvSOQ1fKlq1NtRPD5POhI36fybSRKmDU7lm4fEQc2B27EqwQXd4FCaXW4FaSi/HlessfhG1W9cvDTJ8tkjbP7RdrDOBQD7PQYPYTgmlmkQjrkRbFCguU7Q7ZFmbqcSKZEeD9wmRjHsNSumRtWQk/xxmwZHwbfiIq3w8PHKouk8AGmCh93cnYRS7TlnYAAUL4kD7DY6Q1aPKs++ImjXTjAAN+DRaG9QD vrashabh@sontakke.in"
     ];
     packages = [inputs.home-manager.packages.${pkgs.system}.default];
   };
