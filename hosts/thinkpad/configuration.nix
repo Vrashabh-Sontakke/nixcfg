@@ -88,27 +88,32 @@
     # };
   };
   
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  users.users.vrash = {
-    isNormalUser = true;
-    description = "Vrashabh Sontakke";
-    # Enable ‘sudo’ for the user.
-    extraGroups = [ 
-      "networkmanager" 
-      "wheel" 
-      "docker" 
-      # "adbusers" 
-    ];
-    packages = with pkgs; [
-      google-chrome
-      vscode
-      slack
-      brave
-    ];
-  };
+  # # Define a user account. Don't forget to set a password with ‘passwd’.
+  # users.users.vrash = {
+  #   isNormalUser = true;
+  #   description = "Vrashabh Sontakke";
+  #   # Enable ‘sudo’ for the user.
+  #   extraGroups = [ 
+  #     "networkmanager" 
+  #     "wheel" 
+  #     "docker" 
+  #     # "adbusers" 
+  #   ];
+  #   packages = with pkgs; [
+  #     google-chrome
+  #     vscode
+  #     slack
+  #     brave
+  #   ];
+  # };
 
   # # Install firefox
   # programs.firefox.enable = true;
+
+  programs.hyprland = {
+    enable = true;
+    xwayland.enable = true;
+  }
 
   # nix-ld
   programs.nix-ld.enable = true;
@@ -129,6 +134,7 @@
     nil
     nixd
     direnv
+    neovim
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
