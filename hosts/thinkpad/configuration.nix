@@ -121,10 +121,10 @@
   programs.hyprland = {
     enable = true;
     xwayland.enable = true;
-  }
+  };
 
-  # nix-ld
-  programs.nix-ld.enable = true;
+  # # nix-ld
+  # programs.nix-ld.enable = true;
 
   #direnv
   programs.direnv.enable = true;
@@ -159,7 +159,7 @@
     enable = true;
     settings.PermitRootLogin = "no";
     allowSFTP = true;
-  }
+  };
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
