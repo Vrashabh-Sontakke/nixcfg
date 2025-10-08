@@ -43,8 +43,8 @@
           specialArgs = { inherit inputs outputs; };
           modules = [ 
             ./hosts/thinkpad
-            nix-ld.nixosModules.nix-ld
-            { programs.nix-ld.dev.enable = true; }
+            # nix-ld.nixosModules.nix-ld
+            # { programs.nix-ld.dev.enable = true; }
             disko.nixosModules.disko
       	    nixos-hardware.nixosModules.lenovo-thinkpad-x1-yoga
           ];
