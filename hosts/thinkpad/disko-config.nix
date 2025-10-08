@@ -68,6 +68,9 @@
                 };
               };
             };
+
+            ## Windows 11 dual boot
+
             # Windows = {
             #   name    = "Windows";
             #   label   = "Windows";
@@ -79,6 +82,7 @@
             #     mountOptions = [ "defaults" ];
             #   };
             # };
+            
           };
         };
       };

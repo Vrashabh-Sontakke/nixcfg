@@ -50,12 +50,32 @@
           ];
         };
 
+        # Lenovo Legion 5 15ARH05 (AMD Ryzen 7 4800H | NVIDIA GTX 1650 Ti)
+        legion = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit inputs outputs; };
+          modules = [
+            ./hosts/legion
+            nix-ld.nixosModules.nix-ld
+            { programs.nix-ld.dev.enable = true; }
+            disko.nixosModules.disko
+            nixos-hardware.nixosModules.lenovo-legion-15arh05h
+          ];
+        };
+         
       };
+
       homeConfigurations = {
+
         "vrash@thinkpad" = home-manager.lib.homeManagerConfiguration {
           pkgs = nixpkgs.legacyPackages."x86_64-linux";
           extraSpecialArgs = { inherit inputs outputs; };
           modules = [ ./home/vrash/thinkpad.nix ];
+        };
+
+        "vrash@legion" = home-manager.lib.homeManagerConfiguration {
+          pkgs = nixpkgs.legacyPackages."x86_64-linux";
+          extraSpecialArgs = { inherit inputs outputs; };
+          modules = [ ./home/vrash/legion.nix ];
         };
       };
     };
