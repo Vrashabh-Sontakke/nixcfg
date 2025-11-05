@@ -84,7 +84,11 @@
   # Configure Git
   programs.git = {
     enable = true;
-    userName = "Vrashabh Sontakke";
-    userEmail = "vrashabh@sontakke.in";
+    settings = {
+      user = {
+        name = "Vrashabh Sontakke";
+        email = "vrashabh@sontakke.in";
+      };
+    };
   };
 }
