@@ -46,7 +46,7 @@
       stable.flake = inputs.nixpkgs-stable;
     };
 
-    nixPath = [ "nixpkgs=${inputs.nixpkgs-stable}" ];
+    nixPath = [ "nixpkgs=${outputs.inputs.nixpkgs-stable}" ];
 
   };
 }
