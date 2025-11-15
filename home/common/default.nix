@@ -1,4 +1,4 @@
-{ config, lib, outputs, pkgs, ... }: {
+{ config, lib, outputs, pkgs, inputs, ... }: {
   nixpkgs = {
     # You can add overlays here
     overlays = [
@@ -46,7 +46,7 @@
       stable.flake = inputs.nixpkgs-stable;
     };
 
-    nixPath = [ "nixpkgs=${outputs.inputs.nixpkgs-stable}" ];
+    nixPath = [ "nixpkgs=${inputs.nixpkgs-stable}" ];
 
   };
 }
