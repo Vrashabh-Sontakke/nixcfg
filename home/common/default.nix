@@ -31,6 +31,22 @@
     settings = {
       experimental-features = [ "nix-command" "flakes" ];
       warn-dirty = false;
+      accept-flake-config = true;
     };
+
+  # Set up registries for easy access
+    registry = {
+      # Default 'nixpkgs' points to stable
+      nixpkgs.flake = inputs.nixpkgs-stable;
+      
+      # Add 'unstable' as a shortcut
+      unstable.flake = inputs.nixpkgs;
+      
+      # You can add more shortcuts
+      stable.flake = inputs.nixpkgs-stable;
+    };
+
+    nixPath = [ "nixpkgs=${inputs.nixpkgs-stable}" ];
+
   };
 }
