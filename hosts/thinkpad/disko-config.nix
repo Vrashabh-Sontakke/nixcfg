@@ -69,19 +69,19 @@
               };
             };
 
-            ## Windows 11 dual boot
+            # Windows 11 dual boot
 
-            # Windows = {
-            #   name    = "Windows";
-            #   label   = "Windows";
-            #   size    = "100%";
-            #   type    = "0700"; # NTFS partition type code
-            #   content = {
-            #     type         = "filesystem";
-            #     format       = "ntfs";
-            #     mountOptions = [ "defaults" ];
-            #   };
-            # };
+            Windows = {
+              name    = "Windows";
+              label   = "Windows";
+              size    = "100%";
+              type    = "0700"; # NTFS partition type code
+              content = {
+                type         = "filesystem";
+                format       = "ntfs";
+                mountOptions = [ "defaults" ];
+              };
+            };
             
           };
         };
