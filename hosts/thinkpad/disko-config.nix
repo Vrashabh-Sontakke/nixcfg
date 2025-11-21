@@ -16,61 +16,46 @@
                 type         = "filesystem";
                 format       = "vfat";
                 mountpoint   = "/boot";
-                mountOptions = [ "defaults" ];
+                mountOptions = [ "umask=0077" ];
               };
             };
-            LUKS = {
-              name    = "crypt-nixos";
-              label   = "crypt-part";
-              size    = "100%";
+            NixOS = {
+              name    = "nixos";
+              label   = "nixos";
+              size    = "100G";
               content = {
-                type     = "luks";
-                name     = "cryptroot";
-                extraOpenArgs = [
-                  # "--allow-discards" # duplicate
-                  # process reads and writes synchronously, no extra workqueue.
-                  # Result: lower latency, higher throughput (but at the cost of slightly less CPU load distribution).
-                  "--perf-no_read_workqueue"
-                  "--perf-no_write_workqueue"
-                ];
-                settings = {
-                  allowDiscards = true;
-                };
-                content  = {
-                  type       = "btrfs";
-                  extraArgs  = [ "-L" "nixos" "-f" ];
-                  subvolumes = {
-                    "/root" = {
-                      mountpoint   = "/";
-                      mountOptions = [ "subvol=root" "compress=zstd" "noatime" ];
-                    };
-                    "/home" = {
-                      mountpoint   = "/home";
-                      mountOptions = [ "subvol=home" "compress=zstd" "noatime" ];
-                    };
-                    "/nix"  = {
-                      mountpoint   = "/nix";
-                      mountOptions = [ "subvol=nix" "compress=zstd" "noatime" ];
-                    };
-                    "/persist" = {
-                      mountpoint = "/persist";
-                      mountOptions = [ "subvol=persist" "compress=zstd" "noatime"];
-                    };
-                    "/log" = {
-                      mountpoint = "/var/log";
-                      mountOptions = [ "subvol=log" "compress=zstd" "noatime"];
-                    };
-                    "/swap" = {
-                      mountpoint         = "/swap";
-                      swap.swapfile.size = "16G";
-                    };
+                type       = "btrfs";
+                extraArgs  = [ "-L" "nixos" "-f" ];
+                subvolumes = {
+                  "/root" = {
+                    mountpoint   = "/";
+                    mountOptions = [ "compress=zstd" "noatime" ];
+                  };
+                  "/home" = {
+                    mountpoint   = "/home";
+                    mountOptions = [ "compress=zstd" "noatime" ];
+                  };
+                  "/home/vrash" = { };
+                  "/nix"  = {
+                    mountpoint   = "/nix";
+                    mountOptions = [ "compress=zstd" "noatime" ];
+                  };
+                  "/persist" = {
+                    mountpoint = "/persist";
+                    mountOptions = [ "compress=zstd" "noatime"];
+                  };
+                  "/log" = {
+                    mountpoint = "/var/log";
+                    mountOptions = [ "compress=zstd" "noatime"];
+                  };
+                  "/swap" = {
+                    mountpoint         = "/swap";
+                    swap.swapfile.size = "16G";
                   };
                 };
               };
             };
-
             # Windows 11 dual boot
-
             Windows = {
               name    = "Windows";
               label   = "Windows";
@@ -82,7 +67,6 @@
                 mountOptions = [ "defaults" ];
               };
             };
-            
           };
         };
       };
@@ -91,4 +75,3 @@
   fileSystems."/persist".neededForBoot = true;
   fileSystems."/var/log".neededForBoot = true;
 }
-
