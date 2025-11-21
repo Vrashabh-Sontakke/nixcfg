@@ -114,6 +114,9 @@
   #direnv
   programs.direnv.enable = true;
 
+  #android
+  programs.adb.enable = true;
+
   # Allow unfree packages
   nixpkgs.config.allowUnfree = true;
 

@@ -12,7 +12,7 @@
       "networkmanager"
       "wheel"
       "docker"
-      # "adbusers"
+      "adbusers"
       # "libvirtd"
       # "flatpak"
       # "audio"
