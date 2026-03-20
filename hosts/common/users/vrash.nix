@@ -13,6 +13,7 @@
       "wheel"
       "docker"
       "adbusers"
+      "input"
       # "libvirtd"
       # "flatpak"
       # "audio"
