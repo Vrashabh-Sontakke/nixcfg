@@ -24,6 +24,7 @@
   home.packages = with pkgs; [
     cowsay
     brave
+    google-chrome
     vscode
     slack
     android-tools
