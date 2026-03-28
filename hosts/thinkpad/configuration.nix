@@ -27,7 +27,7 @@
         while true; do
           if [ "$(remote_sessions)" -gt 0 ]; then
             ${pkgs.systemd}/bin/systemd-inhibit \
-              --what=sleep \
+              --what=sleep:handle-lid-switch \
               --who="remote-ssh-guard" \
               --why="Active SSH or VS Code Remote SSH session" \
               ${pkgs.bash}/bin/bash -c "
