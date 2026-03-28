@@ -2,9 +2,47 @@
 # your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
 
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 {
+  systemd.services.sshd.wantedBy = lib.mkForce [ "multi-user.target" ];
+
+  # Inhibit sleep only while remote SSH sessions are active (includes VS Code Remote SSH).
+  systemd.services.prevent-sleep-when-remote = {
+    description = "Inhibit sleep during active remote SSH sessions";
+    wantedBy = [ "multi-user.target" ];
+    after = [ "sshd.service" "network-online.target" ];
+    serviceConfig = {
+      Type = "simple";
+      Restart = "always";
+      RestartSec = "5s";
+      ExecStart = pkgs.writeShellScript "prevent-sleep-when-remote" ''
+        #!${pkgs.bash}/bin/bash
+        set -euo pipefail
+
+        remote_sessions() {
+          ${pkgs.iproute2}/bin/ss -Htn state established '( sport = :22 )' | ${pkgs.coreutils}/bin/wc -l
+        }
+
+        while true; do
+          if [ "$(remote_sessions)" -gt 0 ]; then
+            ${pkgs.systemd}/bin/systemd-inhibit \
+              --what=sleep \
+              --who="remote-ssh-guard" \
+              --why="Active SSH or VS Code Remote SSH session" \
+              ${pkgs.bash}/bin/bash -c "
+                while [ \"\$(${pkgs.iproute2}/bin/ss -Htn state established '( sport = :22 )' | ${pkgs.coreutils}/bin/wc -l)\" -gt 0 ]; do
+                  sleep 15
+                done
+              "
+          else
+            sleep 15
+          fi
+        done
+      '';
+    };
+  };
+
   imports =
     [ # Include the results of the hardware scan.
       ./hardware-configuration.nix
@@ -57,8 +95,6 @@
   services.displayManager.gdm.enable = true;
   services.desktopManager.gnome.enable = true;
   
-  services.logind.settings.Login.HandleLidSwitch = "ignore";
-
   # Configure keymap in X11
   services.xserver.xkb = {
     layout = "us";
