@@ -21,7 +21,18 @@
         set -euo pipefail
 
         remote_sessions() {
-          ${pkgs.iproute2}/bin/ss -Htn state established '( sport = :22 )' | ${pkgs.coreutils}/bin/wc -l
+          local count=0
+          while read -r session_id _; do
+            [ -z "$session_id" ] && continue
+
+            if [ "$( ${pkgs.systemd}/bin/loginctl show-session "$session_id" -p Remote --value 2>/dev/null || true )" = "yes" ] &&
+               [ "$( ${pkgs.systemd}/bin/loginctl show-session "$session_id" -p Service --value 2>/dev/null || true )" = "sshd" ] &&
+               [ "$( ${pkgs.systemd}/bin/loginctl show-session "$session_id" -p State --value 2>/dev/null || true )" = "active" ]; then
+              count=$((count + 1))
+            fi
+          done < <(${pkgs.systemd}/bin/loginctl list-sessions --no-legend 2>/dev/null)
+
+          echo "$count"
         }
 
         while true; do
@@ -31,7 +42,22 @@
               --who="remote-ssh-guard" \
               --why="Active SSH or VS Code Remote SSH session" \
               ${pkgs.bash}/bin/bash -c "
-                while [ \"\$(${pkgs.iproute2}/bin/ss -Htn state established '( sport = :22 )' | ${pkgs.coreutils}/bin/wc -l)\" -gt 0 ]; do
+                remote_sessions() {
+                  local count=0
+                  while read -r session_id _; do
+                    [ -z "\$session_id" ] && continue
+
+                    if [ \"\$(${pkgs.systemd}/bin/loginctl show-session \"\$session_id\" -p Remote --value 2>/dev/null || true)\" = \"yes\" ] &&
+                       [ \"\$(${pkgs.systemd}/bin/loginctl show-session \"\$session_id\" -p Service --value 2>/dev/null || true)\" = \"sshd\" ] &&
+                       [ \"\$(${pkgs.systemd}/bin/loginctl show-session \"\$session_id\" -p State --value 2>/dev/null || true)\" = \"active\" ]; then
+                      count=\$((count + 1))
+                    fi
+                  done < <(${pkgs.systemd}/bin/loginctl list-sessions --no-legend 2>/dev/null)
+
+                  echo \"\$count\"
+                }
+
+                while [ \"\$(remote_sessions)\" -gt 0 ]; do
                   sleep 15
                 done
               "
