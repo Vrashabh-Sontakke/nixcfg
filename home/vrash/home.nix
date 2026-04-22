@@ -28,6 +28,7 @@
     vscode
     slack
     android-tools
+    discord
     # # Adds the 'hello' command to your environment. It prints a friendly
     # # "Hello, world!" when run.
     # pkgs.hello
