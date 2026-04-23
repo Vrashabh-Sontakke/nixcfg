@@ -5,69 +5,70 @@
 { config, lib, pkgs, ... }:
 
 {
-  systemd.services.sshd.wantedBy = lib.mkForce [ "multi-user.target" ];
+  virtualisation.virtualbox.host.enable = true;
+  # systemd.services.sshd.wantedBy = lib.mkForce [ "multi-user.target" ];
 
-  # Inhibit sleep only while remote SSH sessions are active (includes VS Code Remote SSH).
-  systemd.services.prevent-sleep-when-remote = {
-    description = "Inhibit sleep during active remote SSH sessions";
-    wantedBy = [ "multi-user.target" ];
-    after = [ "sshd.service" "network-online.target" ];
-    serviceConfig = {
-      Type = "simple";
-      Restart = "always";
-      RestartSec = "5s";
-      ExecStart = pkgs.writeShellScript "prevent-sleep-when-remote" ''
-        #!${pkgs.bash}/bin/bash
-        set -euo pipefail
+  # # Inhibit sleep only while remote SSH sessions are active (includes VS Code Remote SSH).
+  # systemd.services.prevent-sleep-when-remote = {
+  #   description = "Inhibit sleep during active remote SSH sessions";
+  #   wantedBy = [ "multi-user.target" ];
+  #   after = [ "sshd.service" "network-online.target" ];
+  #   serviceConfig = {
+  #     Type = "simple";
+  #     Restart = "always";
+  #     RestartSec = "5s";
+  #     ExecStart = pkgs.writeShellScript "prevent-sleep-when-remote" ''
+  #       #!${pkgs.bash}/bin/bash
+  #       set -euo pipefail
 
-        remote_sessions() {
-          local count=0
-          while read -r session_id _; do
-            [ -z "$session_id" ] && continue
+  #       remote_sessions() {
+  #         local count=0
+  #         while read -r session_id _; do
+  #           [ -z "$session_id" ] && continue
 
-            if [ "$( ${pkgs.systemd}/bin/loginctl show-session "$session_id" -p Remote --value 2>/dev/null || true )" = "yes" ] &&
-               [ "$( ${pkgs.systemd}/bin/loginctl show-session "$session_id" -p Service --value 2>/dev/null || true )" = "sshd" ] &&
-               [ "$( ${pkgs.systemd}/bin/loginctl show-session "$session_id" -p State --value 2>/dev/null || true )" = "active" ]; then
-              count=$((count + 1))
-            fi
-          done < <(${pkgs.systemd}/bin/loginctl list-sessions --no-legend 2>/dev/null)
+  #           if [ "$( ${pkgs.systemd}/bin/loginctl show-session "$session_id" -p Remote --value 2>/dev/null || true )" = "yes" ] &&
+  #              [ "$( ${pkgs.systemd}/bin/loginctl show-session "$session_id" -p Service --value 2>/dev/null || true )" = "sshd" ] &&
+  #              [ "$( ${pkgs.systemd}/bin/loginctl show-session "$session_id" -p State --value 2>/dev/null || true )" = "active" ]; then
+  #             count=$((count + 1))
+  #           fi
+  #         done < <(${pkgs.systemd}/bin/loginctl list-sessions --no-legend 2>/dev/null)
 
-          echo "$count"
-        }
+  #         echo "$count"
+  #       }
 
-        while true; do
-          if [ "$(remote_sessions)" -gt 0 ]; then
-            ${pkgs.systemd}/bin/systemd-inhibit \
-              --what=sleep:handle-lid-switch \
-              --who="remote-ssh-guard" \
-              --why="Active SSH or VS Code Remote SSH session" \
-              ${pkgs.bash}/bin/bash -c "
-                remote_sessions() {
-                  local count=0
-                  while read -r session_id _; do
-                    [ -z "\$session_id" ] && continue
+  #       while true; do
+  #         if [ "$(remote_sessions)" -gt 0 ]; then
+  #           ${pkgs.systemd}/bin/systemd-inhibit \
+  #             --what=sleep:handle-lid-switch \
+  #             --who="remote-ssh-guard" \
+  #             --why="Active SSH or VS Code Remote SSH session" \
+  #             ${pkgs.bash}/bin/bash -c "
+  #               remote_sessions() {
+  #                 local count=0
+  #                 while read -r session_id _; do
+  #                   [ -z "\$session_id" ] && continue
 
-                    if [ \"\$(${pkgs.systemd}/bin/loginctl show-session \"\$session_id\" -p Remote --value 2>/dev/null || true)\" = \"yes\" ] &&
-                       [ \"\$(${pkgs.systemd}/bin/loginctl show-session \"\$session_id\" -p Service --value 2>/dev/null || true)\" = \"sshd\" ] &&
-                       [ \"\$(${pkgs.systemd}/bin/loginctl show-session \"\$session_id\" -p State --value 2>/dev/null || true)\" = \"active\" ]; then
-                      count=\$((count + 1))
-                    fi
-                  done < <(${pkgs.systemd}/bin/loginctl list-sessions --no-legend 2>/dev/null)
+  #                   if [ \"\$(${pkgs.systemd}/bin/loginctl show-session \"\$session_id\" -p Remote --value 2>/dev/null || true)\" = \"yes\" ] &&
+  #                      [ \"\$(${pkgs.systemd}/bin/loginctl show-session \"\$session_id\" -p Service --value 2>/dev/null || true)\" = \"sshd\" ] &&
+  #                      [ \"\$(${pkgs.systemd}/bin/loginctl show-session \"\$session_id\" -p State --value 2>/dev/null || true)\" = \"active\" ]; then
+  #                     count=\$((count + 1))
+  #                   fi
+  #                 done < <(${pkgs.systemd}/bin/loginctl list-sessions --no-legend 2>/dev/null)
 
-                  echo \"\$count\"
-                }
+  #                 echo \"\$count\"
+  #               }
 
-                while [ \"\$(remote_sessions)\" -gt 0 ]; do
-                  sleep 15
-                done
-              "
-          else
-            sleep 15
-          fi
-        done
-      '';
-    };
-  };
+  #               while [ \"\$(remote_sessions)\" -gt 0 ]; do
+  #                 sleep 15
+  #               done
+  #             "
+  #         else
+  #           sleep 15
+  #         fi
+  #       done
+  #     '';
+  #   };
+  # };
 
   imports =
     [ # Include the results of the hardware scan.
