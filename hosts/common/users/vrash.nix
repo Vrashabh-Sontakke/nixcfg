@@ -14,7 +14,7 @@
       "docker"
       "adbusers"
       "uinput"
-      "vboxusers.members = [ "user-with-access-to-virtualbox" ];"
+      "vboxusers"
       # "libvirtd"
       # "flatpak"
       # "audio"
