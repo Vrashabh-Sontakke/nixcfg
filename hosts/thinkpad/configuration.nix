@@ -5,7 +5,9 @@
 { config, lib, pkgs, ... }:
 
 {
-  virtualisation.virtualbox.host.enable = true;
+  virtualisation.libvirtd.enable = true;
+  programs.virt-manager.enable = true;
+  virtualisation.spiceUSBRedirection.enable = true;
   # systemd.services.sshd.wantedBy = lib.mkForce [ "multi-user.target" ];
 
   # # Inhibit sleep only while remote SSH sessions are active (includes VS Code Remote SSH).
