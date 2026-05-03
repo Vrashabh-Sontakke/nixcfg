@@ -8,6 +8,12 @@
   virtualisation.libvirtd.enable = true;
   programs.virt-manager.enable = true;
   virtualisation.spiceUSBRedirection.enable = true;
+
+  services.logind.settings.Login = {
+    HandleLidSwitch = "ignore";
+    HandleLidSwitchDocked = "ignore";
+    HandleLidSwitchExternalPower = "ignore";
+  };
   # systemd.services.sshd.wantedBy = lib.mkForce [ "multi-user.target" ];
 
   # # Inhibit sleep only while remote SSH sessions are active (includes VS Code Remote SSH).
